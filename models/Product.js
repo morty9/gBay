@@ -19,10 +19,14 @@ module.exports = (api) => {
       type: Date,
       required: true
     },
-    assigned: {
+    creator: {
       type: Schema.Types.ObjectId,
       ref: 'User'
     },
+    category: [{
+      type: Schema.Types.ObjectId,
+      ref: 'Category'
+    }],
     notes: [{
       type: Schema.Types.ObjectId,
       ref: 'Note'
