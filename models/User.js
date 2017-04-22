@@ -21,7 +21,7 @@ module.exports = (api) => {
       required: true
     },
     account: {
-      type: DOUBLE,
+      type: Number,
       required: false
     },
     products: [{

@@ -4,6 +4,8 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
+    "bluebird": "^3.5.0",
+    "body-parser": "^1.17.1",
     "express": "^4.15.2",
     "mongoose-timestamps": "0.0.1"
   },
