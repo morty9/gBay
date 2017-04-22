@@ -21,7 +21,7 @@ module.exports = (api) => {
       required: true
     },
     account: {
-      type: DOUBLE,
+      type: Number,
       required: false
     },
     products: [{
@@ -31,6 +31,10 @@ module.exports = (api) => {
     orders: [{
       type: Schema.Types.ObjectId,
       ref: 'Order'
+    }],
+    opinions: [{
+      type: Schema.Types.ObjectId,
+      ref: 'Opinion'
     }]
   });
 
