@@ -31,6 +31,10 @@ module.exports = (api) => {
     orders: [{
       type: Schema.Types.ObjectId,
       ref: 'Order'
+    }],
+    opinions: [{
+      type: Schema.Types.ObjectId,
+      ref: 'Opinion'
     }]
   });
 

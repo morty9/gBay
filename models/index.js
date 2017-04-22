@@ -8,7 +8,7 @@ module.exports = (api) => {
     User: require('./User')(api),
     Product: require('./Product')(api),
     Order: require('./Order')(api),
-    Avis: require('./Avis')(api),
+    Opinion: require('./Opinion')(api),
     Category: require('./Category')(api)
   };
 };
