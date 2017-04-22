@@ -7,5 +7,5 @@ require('./middlewares')(api);    console.log('>> Initialized middlewares');
 require('./actions')(api);        console.log('>> Initialized actions');
 require('./routes')(api);         console.log('>> Initialized routes');
 
-console.console.log(`Server started and listening on port ${api.settings.port}`);
+console.log(`Server started and listening on port ${api.settings.port}`);
 api.listen(api.settings.port);
