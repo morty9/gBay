@@ -3,7 +3,7 @@ const timestamps = require('mongoose-timestamps');
 
 module.exports = (api) => {
   const schema = new Schema({
-    title: {
+    name: {
       type: String,
       required: true
     },
@@ -15,22 +15,28 @@ module.exports = (api) => {
       type: String,
       required: true
     }],
-    startDate: {
+    date: {
       type: Date,
       required: true
     },
-    creator: {
+    price: {
+      type: Number,
+      required: true
+    },
+    statuSell: {
+      type: String,
+      required: true
+    },
+    seller: {
       type: Schema.Types.ObjectId,
       ref: 'User'
     },
     category: [{
       type: Schema.Types.ObjectId,
       ref: 'Category'
-    }],
-    notes: [{
-      type: Schema.Types.ObjectId,
-      ref: 'Note'
     }]
+  });
 
-  })
-}
+    schema.plugin(timestamps);
+    return api.mongoose.model('Product', schema);
+  };

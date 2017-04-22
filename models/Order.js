@@ -3,8 +3,12 @@ const timestamps = require('mongoose-timestamps');
 
 module.exports = (api) => {
   const schema = new Schema({
-    startDate: {
+    date: {
       type: Date,
+      required: true
+    },
+    note: {
+      type: Number,
       required: true
     },
     seller: {
@@ -14,6 +18,13 @@ module.exports = (api) => {
     buyer: {
       type: Schema.Types.ObjectId,
       ref: 'User'
+    },
+    product: {
+      type: Schema.Types.ObjectId,
+      ref: 'Product'
     }
   });
-}
+
+  schema.plugin(timestamps);
+  return api.mongoose.model('Order', schema);
+};

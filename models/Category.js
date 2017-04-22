@@ -6,9 +6,13 @@ module.exports = (api) => {
     title: {
       type: String,
       required: true
+    },
+    description: {
+      type: String,
+      required: true
     }
   });
 
   schema.plugin(timestamps);
-  return api.mongoose.model('User', schema);
+  return api.mongoose.model('Category', schema);
 }

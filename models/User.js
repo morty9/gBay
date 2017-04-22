@@ -3,7 +3,7 @@ const timestamps = require('mongoose-timestamps');
 
 module.exports = (api) => {
   const schema = new Schema({
-    username: {
+    nickname: {
       type: String,
       required: true
     },
@@ -20,9 +20,9 @@ module.exports = (api) => {
       type: String,
       required: true
     },
-    role: {
-      type: Schema.Types.ObjectId,
-      ref: 'Role'
+    account: {
+      type: DOUBLE,
+      required: false
     },
     products: [{
       type: Schema.Types.ObjectId,
@@ -36,5 +36,4 @@ module.exports = (api) => {
 
   schema.plugin(timestamps);
   return api.mongoose.model('User', schema);
-
 };

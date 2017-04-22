@@ -3,11 +3,16 @@ const timestamps = require('mongoose-timestamps');
 
 module.exports = (api) => {
   const schema = new Schema({
-    title: {
-      type: String
-    }
+    description: {
+      type: String,
+      required: true
+    },
+    user: {
+      type: Schema.Types.ObjectId,
+      ref: 'User'
+    },
   });
 
   schema.plugin(timestamps);
-  return api.mongoose.model('Role', schema);
+  return api.mongoose.model('Avis', schema);
 }
