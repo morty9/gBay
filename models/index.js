@@ -9,6 +9,7 @@ module.exports = (api) => {
     Product: require('./Product')(api),
     Order: require('./Order')(api),
     Opinion: require('./Opinion')(api),
-    Category: require('./Category')(api)
+    Category: require('./Category')(api),
+    Token: require('./Token')(api),
   };
 };

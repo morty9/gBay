@@ -7,6 +7,7 @@ module.exports = (api) => {
     ensureOrderData: require('./ensureOrderData')(api),
     ensureCategoryData: require('./ensureCategoryData')(api),
     ensureOpinionData: require('./ensureOpinionData')(api),
+    ensureAuthenticated : require('./ensureAuthenticated')(api),
     bodyParser: require('body-parser')
     //logger: require('./logger')
   }
