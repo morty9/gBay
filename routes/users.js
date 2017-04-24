@@ -16,7 +16,7 @@ module.exports = (api) => {
     api.actions.users.update);
 
   router.delete('/:id',
-    api.acions.users.remove);
+    api.actions.users.remove);
 
   return router;
 }
