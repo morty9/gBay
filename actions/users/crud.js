@@ -118,6 +118,6 @@ module.exports = (api) => {
     findAll,
     update,
     remove
-  }
+  };
 
 }
