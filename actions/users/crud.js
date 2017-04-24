@@ -2,7 +2,6 @@ const sha1 = require('sha1');
 
 module.exports = (api) => {
   const User = api.models.User;
-  const Role = api.models.Role;
 
   function create(req, res, next) {
     let user = new User(req.body);
@@ -24,18 +23,7 @@ module.exports = (api) => {
           return res.status(500).send(err);
         }
 
-        if (count == 0) {
-          return Role.findOne({title: 'Seller'}, (err, role) => {
-            user.role = role._id.toString();
-            saveUser();
-          });
-        }
-
-        return Role.findOne({title: 'Buyer'}, (err, role) => {
-          user.role = role._id.toString();
-          saveUser();
-        });
-
+        return saveUser();
       });
 
     });
