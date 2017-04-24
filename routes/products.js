@@ -19,10 +19,10 @@ module.exports = (api) => {
   router.delete('/:id',
       api.actions.products.remove);
 
-  router.post('/:id/seller',
+  /*router.post('/:id/seller',
       api.middlewares.bodyParser.json(),
       //api.middlewares.ensureAuthenticated,
-      api.actions.products.assign);
+      api.actions.products.assign);*/
 
   return router;
 }
