@@ -91,10 +91,10 @@ module.exports = (api) => {
         return res.status(401).send('category.already.exists');
       }
 
-      return updateCategories();
+      return updateCategorie();
     });
 
-    function updateCategories() {
+    function updateCategorie() {
       Category.findByIdAndUpdate(req.params.id, req.body, (err, data) => {
         if (err) {
           return res.status(500).send(err);
