@@ -15,6 +15,10 @@ module.exports = (api) => {
         api.middlewares.bodyParser.json(),
         api.actions.users.updateUsers);
 
+    router.put('/:id/credit',
+        api.middlewares.bodyParser.json(),
+        api.actions.users.addCredit);
+
     router.delete('/:id',
         api.actions.users.remove);
 
