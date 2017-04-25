@@ -77,7 +77,7 @@ module.exports = (api) => {
 
 
 
-  function updateCategories(req, res, next) {
+    function updateCategories(req, res, next) {
     let category = new Category(req.body);
 
     Category.findOne({
@@ -93,6 +93,8 @@ module.exports = (api) => {
 
       return updateCategorie();
     });
+  }
+
 
     function updateCategorie() {
       Category.findByIdAndUpdate(req.params.id, req.body, (err, data) => {
