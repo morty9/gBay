@@ -9,6 +9,7 @@
     "express": "^4.15.2",
     "jsonwebtoken": "^7.3.0",
     "mongoose-timestamps": "0.0.1",
+    "mongoose-ttl": "0.0.3",
     "nodemon": "^1.11.0",
     "sha1": "^1.1.1"
   },
