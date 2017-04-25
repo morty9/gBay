@@ -77,7 +77,7 @@ module.exports = (api) => {
 
 
 
-  function updateCategories(req, res, next) {
+    function updateCategories(req, res, next) {
     let category = new Category(req.body);
 
     Category.findOne({
@@ -91,10 +91,12 @@ module.exports = (api) => {
         return res.status(401).send('category.already.exists');
       }
 
-      return updateCategories();
+      return updateCategorie();
     });
+  }
 
-    function updateCategories() {
+
+    function updateCategorie() {
       Category.findByIdAndUpdate(req.params.id, req.body, (err, data) => {
         if (err) {
           return res.status(500).send(err);
