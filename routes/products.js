@@ -7,6 +7,7 @@ module.exports = (api) => {
   router.get('/:id',
       api.actions.products.findOne);
 
+
   router.post('/',
       api.middlewares.bodyParser.json(),
       //api.middlewares.ensureAuthenticated,
@@ -18,6 +19,7 @@ module.exports = (api) => {
 
   router.delete('/:id',
       api.actions.products.remove);
+
 
   /*router.post('/:id/seller',
       api.middlewares.bodyParser.json(),
