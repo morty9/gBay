@@ -5,8 +5,10 @@ module.exports = (api) => {
 
   function create(req, res, next) {
     const userId = req.userId;
+    const cartegoryId = req.categoryId;
     let products = new Product(req.body);
     products.seller = userId;
+    products.category = categoryId;
     //const cat = req.category;
 
     Product.findOne({
@@ -27,6 +29,33 @@ module.exports = (api) => {
       });
     });
 
+    function findAllByCategory(req, res, next) {
+      Product.findAll({
+        category: req.category,
+      }, (err, data) => {
+        if (err) {
+          return res.status(500).send(err);
+        }
+        if (!data || data.length == 0) {
+          return res.status(204).send(data);
+        }
+        return res.send(data);
+      });
+    }
+
+    function findAllBySeller(req, res, next) {
+      Product.findAll({
+        seller: req.seller,
+      }, (err, data) => {
+        if (err) {
+          return res.status(500).send(err);
+        }
+        if (!data || data.length == 0) {
+          return res.status(204).send(data);
+        }
+        return res.send(data);
+      });
+    }
 
     function saveProduct() {
       products.save((err, data) => {
