@@ -21,8 +21,8 @@ module.exports = (api) => {
       required: true
     },
     credit: {
-      type: Number
-      //required: false
+      type: Number,
+      required: false
     },
     products: [{
       type: Schema.Types.ObjectId,

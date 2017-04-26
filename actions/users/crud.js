@@ -2,6 +2,7 @@ const sha1 = require('sha1');
 
 module.exports = (api) => {
   const User = api.models.User;
+  const Product = api.models.Product;
 
   function create(req, res, next) {
     let user = new User(req.body);
@@ -72,6 +73,35 @@ module.exports = (api) => {
     }
   }
 
+  function findAllSeller(req, res, next) {
+    // let user = new User(req.body);
+    // let product = new Product();
+    //setTimeout(getSellers, 3000);
+    console.log('req.body',req.body);
+    // function getSellers() {
+    //   User.find((err, data) => {
+    //     console.log(data);
+    //     if (err) {
+    //       return res.status(500).send(err);
+    //     }
+    //
+    //     Product.find((err, found) => {
+    //       if (err) {
+    //         return res.status(500).send(err);
+    //       }
+    //
+    //       if (!found || found.length == 0) {
+    //         return res.status(401).send('no.sellers');
+    //       }
+    //
+    //       return res.send(found);
+    //     })
+    //
+    //     return res.send(data);
+    //   });
+    // }
+  }
+
   function updateUsers(req, res, next) {
     let user = new User(req.body);
 
@@ -121,49 +151,48 @@ module.exports = (api) => {
 
   function addCredit(req, res, next) {
     let user = new User(req.body);
-    console.log(user.credit);
-    User.findByIdAndUpdate(req.params.id, req.body, (err, data) => {
-      console.log(data);
-      console.log(data.credit);
+
+    User.findById(req.params.id, (err, data) => {
       if (err) {
         return res.status(500).send(err);
       }
 
-      if (!data || data < 0) {
+      if (!data) {
         return res.status(204).send(data);
       }
 
-      if (user.credit < 1) {
-        return res.status(204).send('invalid.credit');
+      if (req.body.credit < 1) {
+        return res.status(401).send('invalid.credit');
       }
 
-      if(data.credit != 0) {
-        console.log("data2",data);
-        data.credit += user.credit;
-
-        // data.update((err, data) => {
-        //   if (err) {
-        //     return res.status(500).send(err);
-        //   }
-        //
-        //   if (!data) {
-        //     return res.status(204).send(data);
-        //   }
-        //
-        //   return res.send(data);
-        // })
-        console.log("data3", data);
-        return res.send(data);
+      if (data.credit != null) {
+        req.body.credit = data.credit += user.credit;
+        return updateCredit();
       }
-
-      return res.send(data);
+      return updateCredit();
     });
+
+    function updateCredit() {
+      User.findByIdAndUpdate(req.params.id, req.body, {new : true}, (err, data) => {
+        if (err) {
+          return res.status(500).send(err);
+        }
+
+        if (!data) {
+          return res.status(204).send(data);
+        }
+
+        return res.send(data);
+      });
+
+    }
   }
 
   return {
     create,
     findOne,
     findAll,
+    findAllSeller,
     updateUsers,
     remove,
     addCredit
