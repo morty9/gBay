@@ -7,6 +7,7 @@ module.exports = (api) => {
   router.get('/:id',
       api.actions.products.findOne);
 
+
   router.post('/',
       api.middlewares.bodyParser.json(),
       //api.middlewares.ensureAuthenticated,
