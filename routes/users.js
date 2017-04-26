@@ -7,6 +7,9 @@ module.exports = (api) => {
     router.get('/:id',
         api.actions.users.findOne);
 
+    router.get('/seller',
+        api.actions.users.findAllSeller);
+
     router.post('/',
         api.middlewares.bodyParser.json(),
         api.actions.users.create);
@@ -14,6 +17,10 @@ module.exports = (api) => {
     router.put('/:id',
         api.middlewares.bodyParser.json(),
         api.actions.users.updateUsers);
+
+    router.put('/:id/credit',
+        api.middlewares.bodyParser.json(),
+        api.actions.users.addCredit);
 
     router.delete('/:id',
         api.actions.users.remove);
