@@ -20,7 +20,10 @@ module.exports = (api) => {
   router.delete('/:id',
       api.actions.products.remove);
 
-
+  router.put('/:id/category',
+      api.middlewares.bodyParser.json(),
+      api.actions.products.addCategory
+  )
   /*router.post('/:id/seller',
       api.middlewares.bodyParser.json(),
       //api.middlewares.ensureAuthenticated,

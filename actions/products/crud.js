@@ -1,14 +1,14 @@
 module.exports = (api) => {
   const Product = api.models.Product;
   const User = api.models.User;
-  //const Category = api.models.Category;
+  const Category = api.models.Category;
 
   function create(req, res, next) {
     const userId = req.userId;
-    const cartegoryId = req.categoryId;
+    const category = req.category;
     let products = new Product(req.body);
     products.seller = userId;
-    products.category = categoryId;
+    products.category = category;
     //const cat = req.category;
 
     Product.findOne({
@@ -120,11 +120,55 @@ module.exports = (api) => {
     });
   }
 
+  function assign(req, res, next) {
+      Product.findByIdAndUpdate(req.params.id, {
+              assigned: req.body.category
+          },
+          (err, products) => {
+            console.log(req.params.id);
+            console.log(req.body.category);
+              if (err) {
+                  return res.status(500).send(err);
+              }
+              res.send(products);
+          });
+  }
+
+
+  function addCategory(req, res, next) {
+      let category = new Category(req.body);
+
+      Category.findById(req.params.id, (err, data) => {
+        if (err) {
+          return res.status(500).send(err);
+        }
+
+        if (!data) {
+          return res.status(204).send(data);
+        }
+        return updateCategory();
+      });
+
+      function updateCategory() {
+        Product.findByIdAndUpdate(req.params.id, req.body, {new : true}, (err, data) => {
+          if (err) {
+            return res.status(500).send(err);
+          }
+          if (!data) {
+            return res.status(204).send(data);
+          }
+          return res.send(data);
+        });
+      }
+    }
+
   return {
     create,
     findOne,
     findAll,
     update,
-    remove
+    remove,
+    assign,
+    addCategory
   };
 }

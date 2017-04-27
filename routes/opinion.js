@@ -2,21 +2,21 @@ const router = require('express').Router();
 
 module.exports = (api) => {
   router.get('/',
-      api.actions.categories.findAll);
+    api.actions.opinion.findAll);
 
-  router.get('/:id',
-      api.actions.categories.findOne);
+//  router.get('/:id',
+//      api.actions.opinion.findOne);
 
   router.post('/',
       api.middlewares.bodyParser.json(),
-      api.actions.categories.create);
+      api.actions.opinion.create);
 
   router.put('/:id',
       api.middlewares.bodyParser.json(),
-      api.actions.categories.update);
+      api.actions.opinion.update);
 
   router.delete('/:id',
-      api.actions.categories.remove);
+      api.actions.opinion.remove);
 
   return router;
 }
