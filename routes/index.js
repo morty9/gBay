@@ -4,4 +4,5 @@ module.exports = (api) => {
   api.use('/users', require('./users')(api));
   api.use('/products', require('./products')(api));
   api.use('/categories', require('./categories')(api));
+  api.use('/opinion', require('./opinion')(api));
 };

@@ -49,16 +49,16 @@ module.exports = (api) => {
   }
 
   function findAll(req, res, next) {
-      Category.find((err, data) => {
-        if (err) {
-          return res.status(500).send(err);
-        }
+    Category.find((err, data) => {
+      if (err) {
+        return res.status(500).send(err);
+      }
 
-        if (!data || data.length == 0) {
-          return res.status(204).send(data);
-        }
-        return res.send(data);
-      });
+      if (!data || data.length == 0) {
+        return res.status(204).send(data);
+      }
+      return res.send(data);
+    });
   }
 
   function update(req, res, next) {
