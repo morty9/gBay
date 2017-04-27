@@ -20,7 +20,7 @@ module.exports = (api) => {
       type: String,
       required: true
     },
-    account: {
+    credit: {
       type: Number,
       required: false
     },

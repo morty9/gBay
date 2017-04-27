@@ -4,10 +4,6 @@
     "url" : "mongodb://localhost:27017/gbay"
   },
   "security": {
-    "salt": "Eno4fna$01",
-    "roles": [
-      "Seller",
-      "Buyer"
-    ]
+    "salt": "Eno4fna$01"
   }
 }
