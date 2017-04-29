@@ -2,11 +2,14 @@ const sha1 = require('sha1');
 
 module.exports = (api) => {
   const User = api.models.User;
-  const Product = api.models.Product;
+  const Order = api.models.Order;
 
   function create(req, res, next) {
     let user = new User(req.body);
     user.password = sha1(user.password);
+    if(user.seller == null) {
+        user.seller = false;
+    }
 
     User.findOne({
       email: user.email,
@@ -36,7 +39,6 @@ module.exports = (api) => {
         }
 
         return res.send(data);
-
       });
     }
   }
@@ -74,32 +76,24 @@ module.exports = (api) => {
   }
 
   function findAllSeller(req, res, next) {
-    // let user = new User(req.body);
-    // let product = new Product();
-    //setTimeout(getSellers, 3000);
-    console.log('req.body',req.body);
-    // function getSellers() {
-    //   User.find((err, data) => {
-    //     console.log(data);
-    //     if (err) {
-    //       return res.status(500).send(err);
-    //     }
-    //
-    //     Product.find((err, found) => {
-    //       if (err) {
-    //         return res.status(500).send(err);
-    //       }
-    //
-    //       if (!found || found.length == 0) {
-    //         return res.status(401).send('no.sellers');
-    //       }
-    //
-    //       return res.send(found);
-    //     })
-    //
-    //     return res.send(data);
-    //   });
-    // }
+    let user = new User(req.body);
+    let i = 0;
+    let sellers = [];
+
+    setTimeout(getSellers, 3000);
+    function getSellers() {
+      User.find({'seller' : true}, (err, data) => {
+        if (err) {
+          return res.status(500).send(err);
+        }
+
+        if (!data) {
+          return res.status(401).send('no.data');
+        }
+
+        return res.send(data);
+      });
+    }
   }
 
   function updateUsers(req, res, next) {
@@ -188,6 +182,27 @@ module.exports = (api) => {
     }
   }
 
+  function averageOrder(req, res, next) {
+
+    User.findById(req.params.id, (err, data) => {
+      if (err) {
+        return res.status(500).send(err);
+      }
+
+      if (!data) {
+        res.status(204).send(data);
+      }
+
+      return getOrders(req.params.id);
+    });
+
+    function getOrders(id) {
+      Order.find({'seller' : id} , (err, data) => {
+        console.log('data',data);
+      });
+    }
+  }
+
   return {
     create,
     findOne,
@@ -195,7 +210,8 @@ module.exports = (api) => {
     findAllSeller,
     updateUsers,
     remove,
-    addCredit
+    addCredit,
+    averageOrder
   };
 
 }

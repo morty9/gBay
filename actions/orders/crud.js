@@ -1,95 +1,128 @@
 module.exports = (api) => {
   const Order = api.models.Order;
+  const User = api.models.User;
+
+  // function create(req, res, next) {
+  //   let order = new Order(req.body);
+  //
+  //   Order.findOne({
+  //     number: order.number,
+  //   }, (err, found) => {
+  //     if (err) {
+  //       return res.status(500).send(err);
+  //     }
+  //
+  //     if (found) {
+  //       return res.status(401).send('order.already.exists');
+  //     }
+  //
+  //     Order.count((err, count) => {
+  //       if (err) {
+  //         return res.status(500).send(err);
+  //       }
+  //
+  //       return saveOrder();
+  //     });
+  //   });
+  //
+  //   function saveOrder() {
+  //     order.save((err, data) => {
+  //       if (err) {
+  //         return res.status(500).send(err);
+  //       }
+  //
+  //       return res.send(data);
+  //     });
+  //   }
+  // }
 
   function create(req, res, next) {
-    let order = new Order(req.body);
+    const userId = req.userId;
 
-    Order.findOne({
-      number: order.number,
-    }, (err, found) => {
+    let order = new Order(req.body)
+    order.seller = userId;
+    //order.buyer = userId;
+    console.log(req.userId);
+    console.log('userID', order.seller);
+
+    order.save((err, data) => {
+        if (err) {
+            return res.status(500).send(err);
+        }
+        order.push(userId.toString());
+        User.findById(userId, (err, user) => {
+            if (err) {
+                return res.status(500).send()
+            }
+
+            console.log('ORDER', user.orders);
+            user.orders.push(data._id.toString())
+            user.save((err) => {
+                if (err) {
+                    return res.status(500).send()
+                }
+
+                return res.send(data);
+            });
+        });
+    });
+  };
+
+  function findOne(req, res, next) {
+    Order.findById(req.params.id, (err, data) => {
       if (err) {
         return res.status(500).send(err);
       }
 
-      if (found) {
-        return res.status(401).send('order.already.exists');
+      if (!data) {
+        return res.status(204).send(data);
       }
 
-      Order.count((err, count) => {
-        if (err) {
-          return res.status(500).send(err);
-        }
-
-        return saveOrder();
-      });
+      return res.send(data);
     });
-
-    function saveOrder() {
-      order.save((err, data) => {
-        if (err) {
-          return res.status(500).send(err);
-        }
-
-        return res.send(data);
-      });
-    }
   }
 
-    function findOne(req, res, next) {
-      Order.findById(req.params.id, (err, data) => {
-        if (err) {
-          return res.status(500).send(err);
-        }
+  function findAll(req, res, next) {
+    Order.find((err, data) => {
+      if (err) {
+        return res.status(500).send(err);
+      }
 
-        if (!data) {
-          return res.status(204).send(data);
-        }
+      if (!data || data.length == 0) {
+        return res.status(204).send(data);
+      }
 
-        return res.send(data);
-      });
-    }
+      return res.send(data);
+    });
+  }
 
-    function findAll(req, res, next) {
-      Order.find((err, data) => {
-        if (err) {
-          return res.status(500).send(err);
-        }
+  function update(req, res, next) {
+    Order.findByIdAndUpdate(req.params.id, req.body, (err, data) => {
+      if (err) {
+        return res.status(500).send(err);
+      }
 
-        if (!data || data.length == 0) {
-          return res.status(204).send(data);
-        }
+      if (!data) {
+        return res.status(204).send(data);
+      }
 
-        return res.send(data);
-      });
-    }
+      return res.send(data);
+    });
+  }
 
-    function update(req, res, next) {
-      Order.findByIdAndUpdate(req.params.id, req.body, (err, data) => {
-        if (err) {
-          return res.status(500).send(err);
-        }
+  function remove(req, res, next) {
+    Order.findByIdAndRemove(req.params.id, (err, data) => {
+      if (err) {
+        return res.status(500).send(err);
+      }
 
-        if (!data) {
-          return res.status(204).send(data);
-        }
+      if (!data) {
+        return res.status(204).send(data);
+      }
 
-        return res.send(data);
-      });
-    }
-
-    function remove(req, res, next) {
-      Order.findByIdAndRemove(req.params.id, (err, data) => {
-        if (err) {
-          return res.status(500).send(err);
-        }
-
-        if (!data) {
-          return res.status(204).send(data);
-        }
-
-        return res.send(data);
-      });
-    }
+      return res.send(data);
+    });
+  }
 
    return {
      create,
