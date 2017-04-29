@@ -133,8 +133,6 @@ module.exports = (api) => {
     });
   }
 
-  //PRODUIT
-
   function remove(req, res, next) {
     Product.findByIdAndRemove(req.params.id, (err, data) => {
       if (err) {
