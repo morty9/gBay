@@ -66,9 +66,7 @@ module.exports = (api) => {
   }
 
   function findAllByCategory(req, res, next) {
-    Product.findAll({
-      category: req.category,
-    }, (err, data) => {
+    Product.find({category: req.params.id}, (err, data) => {
       if (err) {
         return res.status(500).send(err);
       }
@@ -80,9 +78,7 @@ module.exports = (api) => {
   }
 
   function findAllBySeller(req, res, next) {
-    Product.findAll({
-      seller: req.seller,
-    }, (err, data) => {
+    Product.find({seller: req.params.id}, (err, data) => {
       if (err) {
         return res.status(500).send(err);
       }
@@ -119,54 +115,28 @@ module.exports = (api) => {
     });
   }
 
-  function assign(req, res, next) {
-      Product.findByIdAndUpdate(req.params.id, {
-              assigned: req.body.category
-          },
-          (err, products) => {
-            console.log(req.params.id);
-            console.log(req.body.category);
-              if (err) {
-                  return res.status(500).send(err);
-              }
-              res.send(products);
-          });
-  };
+  // function assign(req, res, next) {
+  //     Product.findByIdAndUpdate(req.params.id, {
+  //             assigned: req.body.category
+  //         },
+  //         (err, products) => {
+  //           console.log(req.params.id);
+  //           console.log(req.body.category);
+  //             if (err) {
+  //                 return res.status(500).send(err);
+  //             }
+  //             res.send(products);
+  //         });
+  // };
 
-  function addCategory(req, res, next) {
-      let category = new Category(req.body);
-
-      Category.findById(req.params.id, (err, data) => {
-        if (err) {
-          return res.status(500).send(err);
-        }
-
-        if (!data) {
-          return res.status(204).send(data);
-        }
-        return updateCategory();
-      });
-
-      function updateCategory() {
-        Product.findByIdAndUpdate(req.params.id, req.body, {new : true}, (err, data) => {
-          if (err) {
-            return res.status(500).send(err);
-          }
-          if (!data) {
-            return res.status(204).send(data);
-          }
-          return res.send(data);
-        });
-      }
-    }
 
   return {
     create,
     findOne,
     findAll,
+    findAllByCategory,
     update,
-    remove,
-    assign,
-    addCategory
+    remove
+    //assign
   };
 }
