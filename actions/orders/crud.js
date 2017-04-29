@@ -5,28 +5,27 @@ module.exports = (api) => {
 
   function create(req, res, next) {
     const userId = req.userId;
+    let order = new Order(req.body);
 
-    let order = new Order(req.body)
-    order.seller = userId;
-    //order.buyer = userId;
-    console.log(req.userId);
-    console.log('userID', order.seller);
+    order.buyer = userId;
 
     order.save((err, data) => {
         if (err) {
             return res.status(500).send(err);
         }
-        order.push(userId.toString());
+
+        order.seller = req.body.seller;
+        order.product = req.body.product;
+
         User.findById(userId, (err, user) => {
             if (err) {
-                return res.status(500).send()
+                return res.status(500).send();
             }
 
-            console.log('ORDER', user.orders);
-            user.orders.push(data._id.toString())
+            user.orders.push(data._id.toString());
             user.save((err) => {
                 if (err) {
-                    return res.status(500).send()
+                    return res.status(500).send();
                 }
 
                 return res.send(data);

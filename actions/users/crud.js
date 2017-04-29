@@ -197,8 +197,24 @@ module.exports = (api) => {
     });
 
     function getOrders(id) {
-      Order.find({'seller' : id} , (err, data) => {
-        console.log('data',data);
+      let i = 0;
+      let average = 0;
+      Order.find({'seller' : id} , (err, sellerId) => {
+        console.log(sellerId);
+        if (err) {
+          return res.status(500).send(err);
+        }
+
+        if (!sellerId) {
+          return res.status(401).send('no.orders.exists');
+        }
+
+        while (i < sellerId.length) {
+          average += sellerId[i].note;
+          i++;
+        }
+        average /= sellerId.length;
+        return res.send(average.toString());
       });
     }
   }
