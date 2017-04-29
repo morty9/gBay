@@ -2,11 +2,14 @@ const sha1 = require('sha1');
 
 module.exports = (api) => {
   const User = api.models.User;
-  const Product = api.models.Product;
+  const Order = api.models.Order;
 
   function create(req, res, next) {
     let user = new User(req.body);
     user.password = sha1(user.password);
+    if(user.seller == null) {
+        user.seller = false;
+    }
 
     User.findOne({
       email: user.email,
@@ -36,7 +39,6 @@ module.exports = (api) => {
         }
 
         return res.send(data);
-
       });
     }
   }
@@ -80,8 +82,7 @@ module.exports = (api) => {
 
     setTimeout(getSellers, 3000);
     function getSellers() {
-      User.find((err, data) => {
-        console.log('data',data);
+      User.find({'seller' : true}, (err, data) => {
         if (err) {
           return res.status(500).send(err);
         }
@@ -89,17 +90,8 @@ module.exports = (api) => {
         if (!data) {
           return res.status(401).send('no.data');
         }
-        console.log('data.length', data.length);
-        console.log('data[i]', data[3].seller);
-        while (i <= data.length) {
-          if (data[i].seller) {
-            console.log('user',user);
-            sellers.push(user);
-          }
-          i += 1;
-        }
 
-        return res.send(sellers);
+        return res.send(data);
       });
     }
   }
@@ -190,6 +182,27 @@ module.exports = (api) => {
     }
   }
 
+  function averageOrder(req, res, next) {
+
+    User.findById(req.params.id, (err, data) => {
+      if (err) {
+        return res.status(500).send(err);
+      }
+
+      if (!data) {
+        res.status(204).send(data);
+      }
+
+      return getOrders(req.params.id);
+    });
+
+    function getOrders(id) {
+      Order.find({'seller' : id} , (err, data) => {
+        console.log('data',data);
+      });
+    }
+  }
+
   return {
     create,
     findOne,
@@ -197,7 +210,8 @@ module.exports = (api) => {
     findAllSeller,
     updateUsers,
     remove,
-    addCredit
+    addCredit,
+    averageOrder
   };
 
 }
