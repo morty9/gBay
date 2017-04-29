@@ -24,6 +24,10 @@ module.exports = (api) => {
       type: Number,
       required: false
     },
+    seller: {
+      type: Boolean,
+      required: false
+    },
     products: [{
       type: Schema.Types.ObjectId,
       ref: 'Product'

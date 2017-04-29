@@ -74,32 +74,34 @@ module.exports = (api) => {
   }
 
   function findAllSeller(req, res, next) {
-    // let user = new User(req.body);
-    // let product = new Product();
-    //setTimeout(getSellers, 3000);
-    console.log('req.body',req.body);
-    // function getSellers() {
-    //   User.find((err, data) => {
-    //     console.log(data);
-    //     if (err) {
-    //       return res.status(500).send(err);
-    //     }
-    //
-    //     Product.find((err, found) => {
-    //       if (err) {
-    //         return res.status(500).send(err);
-    //       }
-    //
-    //       if (!found || found.length == 0) {
-    //         return res.status(401).send('no.sellers');
-    //       }
-    //
-    //       return res.send(found);
-    //     })
-    //
-    //     return res.send(data);
-    //   });
-    // }
+    let user = new User(req.body);
+    let i = 0;
+    let sellers = [];
+
+    setTimeout(getSellers, 3000);
+    function getSellers() {
+      User.find((err, data) => {
+        console.log('data',data);
+        if (err) {
+          return res.status(500).send(err);
+        }
+
+        if (!data) {
+          return res.status(401).send('no.data');
+        }
+        console.log('data.length', data.length);
+        console.log('data[i]', data[3].seller);
+        while (i <= data.length) {
+          if (data[i].seller) {
+            console.log('user',user);
+            sellers.push(user);
+          }
+          i += 1;
+        }
+
+        return res.send(sellers);
+      });
+    }
   }
 
   function updateUsers(req, res, next) {

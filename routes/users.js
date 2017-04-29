@@ -4,11 +4,11 @@ module.exports = (api) => {
     router.get('/',
         api.actions.users.findAll);
 
-    router.get('/:id',
-        api.actions.users.findOne);
-
     router.get('/seller',
         api.actions.users.findAllSeller);
+
+    router.get('/:id',
+        api.actions.users.findOne);
 
     router.post('/',
         api.middlewares.bodyParser.json(),
