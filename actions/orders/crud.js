@@ -1,40 +1,7 @@
 module.exports = (api) => {
   const Order = api.models.Order;
   const User = api.models.User;
-
-  // function create(req, res, next) {
-  //   let order = new Order(req.body);
-  //
-  //   Order.findOne({
-  //     number: order.number,
-  //   }, (err, found) => {
-  //     if (err) {
-  //       return res.status(500).send(err);
-  //     }
-  //
-  //     if (found) {
-  //       return res.status(401).send('order.already.exists');
-  //     }
-  //
-  //     Order.count((err, count) => {
-  //       if (err) {
-  //         return res.status(500).send(err);
-  //       }
-  //
-  //       return saveOrder();
-  //     });
-  //   });
-  //
-  //   function saveOrder() {
-  //     order.save((err, data) => {
-  //       if (err) {
-  //         return res.status(500).send(err);
-  //       }
-  //
-  //       return res.send(data);
-  //     });
-  //   }
-  // }
+  const Product = api.models.Product;
 
   function create(req, res, next) {
     const userId = req.userId;
