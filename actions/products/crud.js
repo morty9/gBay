@@ -4,7 +4,7 @@ module.exports = (api) => {
   const Category = api.models.Category;
 
   function create(req, res, next) {
-    const userId = req.userId;
+    const userId = req.seller;
     const categoryId = req.category;
 
     let products = new Product(req.body);
@@ -33,7 +33,7 @@ module.exports = (api) => {
         }
 
         products.category.push(data._id.toString());
-          return res.send(data);
+        return res.send(data);
       });
     });
   }
@@ -43,7 +43,6 @@ module.exports = (api) => {
       if (err) {
         return res.status(500).send(err);
       }
-
       if (!data) {
         return res.status(204).send(data);
       }
@@ -97,7 +96,6 @@ module.exports = (api) => {
       if (err) {
         return res.status(500).send(err);
       }
-
       if (!data) {
         return res.status(204).send(data);
       }
@@ -110,7 +108,6 @@ module.exports = (api) => {
       if (err) {
         return res.status(500).send(err);
       }
-
       if (!data) {
         return res.status(204).send(data);
       }

@@ -11,6 +11,10 @@ module.exports = (api) => {
       type: Schema.Types.ObjectId,
       ref: 'User'
     },
+    seller: {
+      type: Schema.Types.ObjectId,
+      ref: 'User'
+    }
   });
 
   schema.plugin(timestamps);
