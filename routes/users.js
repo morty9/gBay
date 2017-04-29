@@ -10,6 +10,9 @@ module.exports = (api) => {
     router.get('/:id',
         api.actions.users.findOne);
 
+    router.get('/:id/average',
+        api.actions.users.averageOrder);
+
     router.post('/',
         api.middlewares.bodyParser.json(),
         api.actions.users.create);
