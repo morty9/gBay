@@ -11,10 +11,6 @@ module.exports = (api) => {
       type: String,
       required: true
     },
-    picture: [{
-      type: String,
-      required: true
-    }],
     date: {
       type: Date,
       required: true
@@ -23,8 +19,8 @@ module.exports = (api) => {
       type: Number,
       required: true
     },
-    statuSell: {
-      type: String,
+    isDirect: {
+      type: Boolean,
       required: true
     },
     seller: {
