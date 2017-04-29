@@ -3,33 +3,6 @@ module.exports = (api) => {
   const User = api.models.User;
   const Category = api.models.Category;
 
-  // function create(req, res, next) {
-  //   const userId = req.userId;
-  //   const category = req.category;
-  //
-  //   let products = new Product(req.body);
-  //   products.seller = userId;
-  //   products.category = category;
-  //   //const cat = req.category;
-  //
-  //   Product.findOne({
-  //     name: products.name,
-  //   }, (err, found) => {
-  //     if (err) {
-  //       return res.status(500).send(err);
-  //     }
-  //     if (found) {
-  //       return res.status(401).send('name.already.exists');
-  //     }
-  //
-  //     Product.count((err, count) => {
-  //       if (err) {
-  //         return res.status(500).send(err);
-  //       }
-  //       return saveProduct();
-  //     });
-  //   });
-  // };
   function create(req, res, next) {
     const userId = req.userId;
     const categoryId = req.category;
@@ -159,16 +132,6 @@ module.exports = (api) => {
               res.send(products);
           });
   };
-
-    // function saveProduct() {
-    //   products.save((err, data) => {
-    //     if (err) {
-    //       return res.status(500).send(err);
-    //     }
-    //
-    //     return res.send(data);
-    //   });
-    // };
 
   function addCategory(req, res, next) {
       let category = new Category(req.body);
