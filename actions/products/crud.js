@@ -3,69 +3,67 @@ module.exports = (api) => {
   const User = api.models.User;
   const Category = api.models.Category;
 
+  // function create(req, res, next) {
+  //   const userId = req.userId;
+  //   const category = req.category;
+  //
+  //   let products = new Product(req.body);
+  //   products.seller = userId;
+  //   products.category = category;
+  //   //const cat = req.category;
+  //
+  //   Product.findOne({
+  //     name: products.name,
+  //   }, (err, found) => {
+  //     if (err) {
+  //       return res.status(500).send(err);
+  //     }
+  //     if (found) {
+  //       return res.status(401).send('name.already.exists');
+  //     }
+  //
+  //     Product.count((err, count) => {
+  //       if (err) {
+  //         return res.status(500).send(err);
+  //       }
+  //       return saveProduct();
+  //     });
+  //   });
+  // };
   function create(req, res, next) {
     const userId = req.userId;
-    const category = req.category;
+    const categoryId = req.category;
+
     let products = new Product(req.body);
     products.seller = userId;
-    products.category = category;
+    // products.category = categoryId;
     //const cat = req.category;
-
     Product.findOne({
       name: products.name,
     }, (err, found) => {
       if (err) {
         return res.status(500).send(err);
       }
-      if (found) {
-        return res.status(401).send('name.already.exists');
-      }
 
-      Product.count((err, count) => {
-        if (err) {
-          return res.status(500).send(err);
-        }
-        return saveProduct();
-      });
+      if (found) {
+        return res.status(401).send('product.already.exists');
+      }
     });
 
-    function findAllByCategory(req, res, next) {
-      Product.findAll({
-        category: req.category,
-      }, (err, data) => {
-        if (err) {
-          return res.status(500).send(err);
-        }
-        if (!data || data.length == 0) {
-          return res.status(204).send(data);
-        }
-        return res.send(data);
-      });
-    }
+    products.save((err, data) => {
+      if (err) {
+        return res.status(500).send(err);
+      }
 
-    function findAllBySeller(req, res, next) {
-      Product.findAll({
-        seller: req.seller,
-      }, (err, data) => {
-        if (err) {
-          return res.status(500).send(err);
-        }
-        if (!data || data.length == 0) {
-          return res.status(204).send(data);
-        }
-        return res.send(data);
-      });
-    }
-
-    function saveProduct() {
-      products.save((err, data) => {
+      Category.findById(categoryId, (err, user) => {
         if (err) {
           return res.status(500).send(err);
         }
 
-        return res.send(data);
+        products.category.push(data._id.toString());
+          return res.send(data);
       });
-    }
+    });
   }
 
   function findOne(req, res, next) {
@@ -87,6 +85,34 @@ module.exports = (api) => {
         return res.status(500).send(err);
       }
 
+      if (!data || data.length == 0) {
+        return res.status(204).send(data);
+      }
+      return res.send(data);
+    });
+  }
+
+  function findAllByCategory(req, res, next) {
+    Product.findAll({
+      category: req.category,
+    }, (err, data) => {
+      if (err) {
+        return res.status(500).send(err);
+      }
+      if (!data || data.length == 0) {
+        return res.status(204).send(data);
+      }
+      return res.send(data);
+    });
+  }
+
+  function findAllBySeller(req, res, next) {
+    Product.findAll({
+      seller: req.seller,
+    }, (err, data) => {
+      if (err) {
+        return res.status(500).send(err);
+      }
       if (!data || data.length == 0) {
         return res.status(204).send(data);
       }
@@ -132,8 +158,17 @@ module.exports = (api) => {
               }
               res.send(products);
           });
-  }
+  };
 
+    // function saveProduct() {
+    //   products.save((err, data) => {
+    //     if (err) {
+    //       return res.status(500).send(err);
+    //     }
+    //
+    //     return res.send(data);
+    //   });
+    // };
 
   function addCategory(req, res, next) {
       let category = new Category(req.body);
