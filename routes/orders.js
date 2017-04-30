@@ -7,9 +7,13 @@ module.exports = (api) => {
     router.get('/:id',
       api.actions.orders.findOne);
 
+    router.get('/seller/:id',
+      api.middlewares.ensureAuthenticated,
+      api.actions.orders.findAllOrderBySeller);
+
     router.post('/',
       api.middlewares.bodyParser.json(),
-      api.middlewares.ensureAuthenticated,
+      // api.middlewares.ensureAuthenticated,
       api.actions.orders.create);
 
     router.put('/:id',
@@ -17,6 +21,7 @@ module.exports = (api) => {
       api.actions.orders.update);
 
     router.delete('/:id',
+      api.middlewares.ensureAuthenticated,
       api.actions.orders.remove);
 
     return router;

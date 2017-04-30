@@ -19,10 +19,12 @@ module.exports = (api) => {
 
     router.put('/:id',
         api.middlewares.bodyParser.json(),
+        api.middlewares.ensureAuthenticated,
         api.actions.users.updateUsers);
 
     router.put('/:id/credit',
         api.middlewares.bodyParser.json(),
+        api.middlewares.ensureAuthenticated,
         api.actions.users.addCredit);
 
     router.delete('/:id',
