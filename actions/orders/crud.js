@@ -32,6 +32,30 @@ module.exports = (api) => {
             });
         });
     });
+
+    // Product.find(req.body.product, (err, data) => {
+    //   if (err) {
+    //     return res.status(500).send(err);
+    //   }
+    //
+    //   if (!data) {
+    //     return res.status(204).send(data);
+    //   }
+    //
+    //   User.find(req.body.seller, (err, seller) => {
+    //     if (err) {
+    //       return res.status(500).send(err);
+    //     }
+    //
+    //     if (!seller) {
+    //       return res.status(204).send(seller);
+    //     }
+    //
+    //     return User.addCredit(data.price);
+    //   })
+    //
+    // })
+
   };
 
   function findOne(req, res, next) {
@@ -90,12 +114,29 @@ module.exports = (api) => {
     });
   }
 
+  function findAllOrderBySeller(req, res, next) {
+    let user = new User(req.body);
+
+    Order.find({'seller': req.params.id}, (err, data) => {
+      if (err) {
+        return res.status(500).send(err);
+      }
+
+      if (!data) {
+        return res.status(401).send('no.orders');
+      }
+
+      return res.send(data);
+    });
+  }
+
    return {
      create,
      findOne,
      findAll,
      update,
-     remove
+     remove,
+     findAllOrderBySeller
    };
 
 }

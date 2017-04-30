@@ -4,13 +4,12 @@ module.exports = (api) => {
   const Category = api.models.Category;
 
   function create(req, res, next) {
-    const userId = req.userId;
+    const userId = req.seller;
     const categoryId = req.category;
 
     let products = new Product(req.body);
     products.seller = userId;
-    // products.category = categoryId;
-    //const cat = req.category;
+
     Product.findOne({
       name: products.name,
     }, (err, found) => {
@@ -39,8 +38,6 @@ module.exports = (api) => {
         });
       }
     });
-
-
   }
 
   function findOne(req, res, next) {
@@ -48,7 +45,6 @@ module.exports = (api) => {
       if (err) {
         return res.status(500).send(err);
       }
-
       if (!data) {
         return res.status(204).send(data);
       }
@@ -152,7 +148,6 @@ module.exports = (api) => {
       if (err) {
         return res.status(500).send(err);
       }
-
       if (!data) {
         return res.status(204).send(data);
       }
@@ -165,7 +160,6 @@ module.exports = (api) => {
       if (err) {
         return res.status(500).send(err);
       }
-
       if (!data) {
         return res.status(204).send(data);
       }
