@@ -4,13 +4,12 @@ module.exports = (api) => {
   const Category = api.models.Category;
 
   function create(req, res, next) {
-    const userId = req.userId;
-    const categoryId = req.category;
+    const userId = req.body.seller;
+    const categoryId = req.body.category;
 
     let products = new Product(req.body);
     products.seller = userId;
-    // products.category = categoryId;
-    //const cat = req.category;
+
     Product.findOne({
       name: products.name,
     }, (err, found) => {
@@ -21,21 +20,23 @@ module.exports = (api) => {
       if (found) {
         return res.status(401).send('product.already.exists');
       }
-    });
 
-    products.save((err, data) => {
-      if (err) {
-        return res.status(500).send(err);
+      else {
+        products.save((err, data) => {
+          if (err) {
+            return res.status(500).send(err);
+          }
+
+          Category.findById(categoryId, (err, user) => {
+            if (err) {
+              return res.status(500).send(err);
+            }
+
+            products.category.push(data._id.toString());
+              return res.send(data);
+          });
+        });
       }
-
-      Category.findById(categoryId, (err, user) => {
-        if (err) {
-          return res.status(500).send(err);
-        }
-
-        products.category.push(data._id.toString());
-          return res.send(data);
-      });
     });
   }
 
@@ -44,7 +45,6 @@ module.exports = (api) => {
       if (err) {
         return res.status(500).send(err);
       }
-
       if (!data) {
         return res.status(204).send(data);
       }
@@ -65,6 +65,59 @@ module.exports = (api) => {
     });
   }
 
+  function sortByDescPrice(req, res, next) {
+    Product.find({}).sort('-price').exec(function(err, data) {
+      if (err) {
+        return res.status(500).send(err);
+      }
+
+      if (!data || data.length == 0) {
+        return res.status(204).send(data);
+      }
+      return res.send(data);
+    });
+  }
+
+  function sortByAscPrice(req, res, next) {
+    Product.find({}).sort('price').exec(function(err, data) {
+      if (err) {
+        return res.status(500).send(err);
+      }
+
+      if (!data || data.length == 0) {
+        return res.status(204).send(data);
+      }
+      return res.send(data);
+    });
+  }
+
+  function sortByDescDate(req, res, next) {
+    Product.find({}).sort('-date').exec(function(err, data) {
+      if (err) {
+        return res.status(500).send(err);
+      }
+
+      if (!data || data.length == 0) {
+        return res.status(204).send(data);
+      }
+      return res.send(data);
+    });
+  }
+
+  function sortByAscDate(req, res, next) {
+    Product.find({}).sort('date').exec(function(err, data) {
+      if (err) {
+        return res.status(500).send(err);
+      }
+
+      if (!data || data.length == 0) {
+        return res.status(204).send(data);
+      }
+      return res.send(data);
+    });
+  }
+
+
   function findAllByCategory(req, res, next) {
     Product.find({category: req.params.id}, (err, data) => {
       if (err) {
@@ -73,6 +126,7 @@ module.exports = (api) => {
       if (!data || data.length == 0) {
         return res.status(204).send(data);
       }
+      console.log(data);
       return res.send(data);
     });
   }
@@ -94,7 +148,6 @@ module.exports = (api) => {
       if (err) {
         return res.status(500).send(err);
       }
-
       if (!data) {
         return res.status(204).send(data);
       }
@@ -107,7 +160,6 @@ module.exports = (api) => {
       if (err) {
         return res.status(500).send(err);
       }
-
       if (!data) {
         return res.status(204).send(data);
       }
@@ -115,28 +167,17 @@ module.exports = (api) => {
     });
   }
 
-  // function assign(req, res, next) {
-  //     Product.findByIdAndUpdate(req.params.id, {
-  //             assigned: req.body.category
-  //         },
-  //         (err, products) => {
-  //           console.log(req.params.id);
-  //           console.log(req.body.category);
-  //             if (err) {
-  //                 return res.status(500).send(err);
-  //             }
-  //             res.send(products);
-  //         });
-  // };
-
-
   return {
     create,
     findOne,
     findAll,
+    sortByDescPrice,
+    sortByAscPrice,
+    sortByDescDate,
+    sortByAscDate,
     findAllByCategory,
+    findAllBySeller,
     update,
     remove
-    //assign
   };
 }

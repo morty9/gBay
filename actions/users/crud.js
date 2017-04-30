@@ -3,6 +3,7 @@ const sha1 = require('sha1');
 module.exports = (api) => {
   const User = api.models.User;
   const Order = api.models.Order;
+  const Product = api.models.Product;
 
   function create(req, res, next) {
     let user = new User(req.body);
@@ -77,8 +78,6 @@ module.exports = (api) => {
 
   function findAllSeller(req, res, next) {
     let user = new User(req.body);
-    let i = 0;
-    let sellers = [];
 
     setTimeout(getSellers, 3000);
     function getSellers() {
@@ -114,6 +113,8 @@ module.exports = (api) => {
     });
 
     function updateUser() {
+      let user = req.userId;
+
       User.findByIdAndUpdate(req.params.id, req.body, (err, data) => {
         if (err) {
           return res.status(500).send(err);
@@ -123,6 +124,10 @@ module.exports = (api) => {
           return res.status(204).send(data);
         }
 
+        if (req.params.id != user) {
+          return res.status(401).send('access.denied');
+        }
+
         return res.send(data);
       });
     }
@@ -130,6 +135,7 @@ module.exports = (api) => {
   }
 
   function remove(req, res, next) {
+
     User.findByIdAndRemove(req.params.id, (err, data) => {
       if (err) {
         return res.status(500).send(err);
@@ -141,10 +147,34 @@ module.exports = (api) => {
 
       return res.send(data);
     });
+    // Product.find({'seller' : req.params.id}, (err, data) => {
+    //   console.log(data);
+    //   if (err) {
+    //     return res.status(500).send(err);
+    //   }
+    //
+    //   if (!data) {
+    //     return res.status(204).send(data);
+    //   }
+    //
+    //   Product.findByIdAndRemove({'id' : data._id}, (err, data) => {
+    //     console.log(data);
+    //       if (err) {
+    //         return res.status(500).send(err);
+    //       }
+    //
+    //       if (!data) {
+    //         return res.status(204).send(data);
+    //       }
+    //
+    //       return res.send(data);
+    //   });
+    // });
   }
 
   function addCredit(req, res, next) {
     let user = new User(req.body);
+    let userAuthenticated = req.userId;
 
     User.findById(req.params.id, (err, data) => {
       if (err) {
@@ -153,6 +183,10 @@ module.exports = (api) => {
 
       if (!data) {
         return res.status(204).send(data);
+      }
+
+      if (req.params.id != userAuthenticated) {
+        return res.status(401).send('access.denied');
       }
 
       if (req.body.credit < 1) {
@@ -200,7 +234,6 @@ module.exports = (api) => {
       let i = 0;
       let average = 0;
       Order.find({'seller' : id} , (err, sellerId) => {
-        console.log(sellerId);
         if (err) {
           return res.status(500).send(err);
         }
