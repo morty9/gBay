@@ -3,41 +3,13 @@ module.exports = (api) => {
   const User = api.models.User;
   const Category = api.models.Category;
 
-  // function create(req, res, next) {
-  //   const userId = req.userId;
-  //   const category = req.category;
-  //
-  //   let products = new Product(req.body);
-  //   products.seller = userId;
-  //   products.category = category;
-  //   //const cat = req.category;
-  //
-  //   Product.findOne({
-  //     name: products.name,
-  //   }, (err, found) => {
-  //     if (err) {
-  //       return res.status(500).send(err);
-  //     }
-  //     if (found) {
-  //       return res.status(401).send('name.already.exists');
-  //     }
-  //
-  //     Product.count((err, count) => {
-  //       if (err) {
-  //         return res.status(500).send(err);
-  //       }
-  //       return saveProduct();
-  //     });
-  //   });
-  // };
   function create(req, res, next) {
-    const userId = req.userId;
+    const userId = req.seller;
     const categoryId = req.category;
 
     let products = new Product(req.body);
     products.seller = userId;
-    // products.category = categoryId;
-    //const cat = req.category;
+
     Product.findOne({
       name: products.name,
     }, (err, found) => {
@@ -61,7 +33,7 @@ module.exports = (api) => {
         }
 
         products.category.push(data._id.toString());
-          return res.send(data);
+        return res.send(data);
       });
     });
   }
@@ -71,7 +43,6 @@ module.exports = (api) => {
       if (err) {
         return res.status(500).send(err);
       }
-
       if (!data) {
         return res.status(204).send(data);
       }
@@ -125,7 +96,6 @@ module.exports = (api) => {
       if (err) {
         return res.status(500).send(err);
       }
-
       if (!data) {
         return res.status(204).send(data);
       }
@@ -138,7 +108,6 @@ module.exports = (api) => {
       if (err) {
         return res.status(500).send(err);
       }
-
       if (!data) {
         return res.status(204).send(data);
       }
