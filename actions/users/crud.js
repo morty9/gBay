@@ -147,29 +147,29 @@ module.exports = (api) => {
 
       return res.send(data);
     });
-    Product.find({'seller' : req.params.id}, (err, data) => {
-      console.log(data);
-      if (err) {
-        return res.status(500).send(err);
-      }
-
-      if (!data) {
-        return res.status(204).send(data);
-      }
-
-      Product.findByIdAndRemove({'id' : data._id}, (err, data) => {
-        console.log(data);
-          if (err) {
-            return res.status(500).send(err);
-          }
-
-          if (!data) {
-            return res.status(204).send(data);
-          }
-
-          return res.send(data);
-      });
-    });
+    // Product.find({'seller' : req.params.id}, (err, data) => {
+    //   console.log(data);
+    //   if (err) {
+    //     return res.status(500).send(err);
+    //   }
+    //
+    //   if (!data) {
+    //     return res.status(204).send(data);
+    //   }
+    //
+    //   Product.findByIdAndRemove({'id' : data._id}, (err, data) => {
+    //     console.log(data);
+    //       if (err) {
+    //         return res.status(500).send(err);
+    //       }
+    //
+    //       if (!data) {
+    //         return res.status(204).send(data);
+    //       }
+    //
+    //       return res.send(data);
+    //   });
+    // });
   }
 
   function addCredit(req, res, next) {
