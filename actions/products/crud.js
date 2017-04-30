@@ -3,33 +3,6 @@ module.exports = (api) => {
   const User = api.models.User;
   const Category = api.models.Category;
 
-  // function create(req, res, next) {
-  //   const userId = req.userId;
-  //   const category = req.category;
-  //
-  //   let products = new Product(req.body);
-  //   products.seller = userId;
-  //   products.category = category;
-  //   //const cat = req.category;
-  //
-  //   Product.findOne({
-  //     name: products.name,
-  //   }, (err, found) => {
-  //     if (err) {
-  //       return res.status(500).send(err);
-  //     }
-  //     if (found) {
-  //       return res.status(401).send('name.already.exists');
-  //     }
-  //
-  //     Product.count((err, count) => {
-  //       if (err) {
-  //         return res.status(500).send(err);
-  //       }
-  //       return saveProduct();
-  //     });
-  //   });
-  // };
   function create(req, res, next) {
     const userId = req.userId;
     const categoryId = req.category;
@@ -48,22 +21,26 @@ module.exports = (api) => {
       if (found) {
         return res.status(401).send('product.already.exists');
       }
-    });
 
-    products.save((err, data) => {
-      if (err) {
-        return res.status(500).send(err);
+      else {
+        products.save((err, data) => {
+          if (err) {
+            return res.status(500).send(err);
+          }
+
+          Category.findById(categoryId, (err, user) => {
+            if (err) {
+              return res.status(500).send(err);
+            }
+
+            products.category.push(data._id.toString());
+              return res.send(data);
+          });
+        });
       }
-
-      Category.findById(categoryId, (err, user) => {
-        if (err) {
-          return res.status(500).send(err);
-        }
-
-        products.category.push(data._id.toString());
-          return res.send(data);
-      });
     });
+
+
   }
 
   function findOne(req, res, next) {
@@ -92,13 +69,12 @@ module.exports = (api) => {
     });
   }
 
-  function findAllByCategory(req, res, next) {
-    Product.findAll({
-      category: req.category,
-    }, (err, data) => {
+  function sortByDescPrice(req, res, next) {
+    Product.find({}).sort('-price').exec(function(err, data) {
       if (err) {
         return res.status(500).send(err);
       }
+
       if (!data || data.length == 0) {
         return res.status(204).send(data);
       }
@@ -106,9 +82,64 @@ module.exports = (api) => {
     });
   }
 
+  function sortByAscPrice(req, res, next) {
+    Product.find({}).sort('price').exec(function(err, data) {
+      if (err) {
+        return res.status(500).send(err);
+      }
+
+      if (!data || data.length == 0) {
+        return res.status(204).send(data);
+      }
+      return res.send(data);
+    });
+  }
+
+  function sortByDescDate(req, res, next) {
+    Product.find({}).sort('-date').exec(function(err, data) {
+      if (err) {
+        return res.status(500).send(err);
+      }
+
+      if (!data || data.length == 0) {
+        return res.status(204).send(data);
+      }
+      return res.send(data);
+    });
+  }
+
+  function sortByAscDate(req, res, next) {
+    Product.find({}).sort('date').exec(function(err, data) {
+      if (err) {
+        return res.status(500).send(err);
+      }
+
+      if (!data || data.length == 0) {
+        return res.status(204).send(data);
+      }
+      return res.send(data);
+    });
+  }
+
+
+  function findAllByCategory(req, res, next) {
+    Product.find({
+      category: req.params.id,
+    }, (err, data) => {
+      if (err) {
+        return res.status(500).send(err);
+      }
+      if (!data || data.length == 0) {
+        return res.status(204).send(data);
+      }
+      console.log(data);
+      return res.send(data);
+    });
+  }
+
   function findAllBySeller(req, res, next) {
-    Product.findAll({
-      seller: req.seller,
+    Product.find({
+      seller: req.params.id,
     }, (err, data) => {
       if (err) {
         return res.status(500).send(err);
@@ -146,64 +177,17 @@ module.exports = (api) => {
     });
   }
 
-  function assign(req, res, next) {
-      Product.findByIdAndUpdate(req.params.id, {
-              assigned: req.body.category
-          },
-          (err, products) => {
-            console.log(req.params.id);
-            console.log(req.body.category);
-              if (err) {
-                  return res.status(500).send(err);
-              }
-              res.send(products);
-          });
-  };
-
-    // function saveProduct() {
-    //   products.save((err, data) => {
-    //     if (err) {
-    //       return res.status(500).send(err);
-    //     }
-    //
-    //     return res.send(data);
-    //   });
-    // };
-
-  function addCategory(req, res, next) {
-      let category = new Category(req.body);
-
-      Category.findById(req.params.id, (err, data) => {
-        if (err) {
-          return res.status(500).send(err);
-        }
-
-        if (!data) {
-          return res.status(204).send(data);
-        }
-        return updateCategory();
-      });
-
-      function updateCategory() {
-        Product.findByIdAndUpdate(req.params.id, req.body, {new : true}, (err, data) => {
-          if (err) {
-            return res.status(500).send(err);
-          }
-          if (!data) {
-            return res.status(204).send(data);
-          }
-          return res.send(data);
-        });
-      }
-    }
-
   return {
     create,
     findOne,
     findAll,
+    sortByDescPrice,
+    sortByAscPrice,
+    sortByDescDate,
+    sortByAscDate,
+    findAllByCategory,
+    findAllBySeller,
     update,
-    remove,
-    assign,
-    addCategory
+    remove
   };
 }

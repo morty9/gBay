@@ -4,9 +4,28 @@ module.exports = (api) => {
   router.get('/',
     api.actions.products.findAll);
 
+  router.get('/descprice',
+      api.actions.products.sortByDescPrice);
+
+  router.get('/ascprice',
+      api.actions.products.sortByAscPrice);
+
+  router.get('/descdate',
+      api.actions.products.sortByDescDate);
+
+  router.get('/ascdate',
+      api.actions.products.sortByAscDate);
+
   router.get('/:id',
       api.actions.products.findOne);
 
+  router.get('/categories/:id',
+      api.middlewares.bodyParser.json(),
+      api.actions.products.findAllByCategory);
+
+  router.get('/seller/:id',
+      api.middlewares.bodyParser.json(),
+      api.actions.products.findAllBySeller);
 
   router.post('/',
       api.middlewares.bodyParser.json(),
@@ -19,11 +38,6 @@ module.exports = (api) => {
 
   router.delete('/:id',
       api.actions.products.remove);
-
-  router.put('/:id/category',
-      api.middlewares.bodyParser.json(),
-      api.actions.products.addCategory
-  )
   /*router.post('/:id/seller',
       api.middlewares.bodyParser.json(),
       //api.middlewares.ensureAuthenticated,
