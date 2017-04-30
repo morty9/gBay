@@ -123,9 +123,7 @@ module.exports = (api) => {
 
 
   function findAllByCategory(req, res, next) {
-    Product.find({
-      category: req.params.id,
-    }, (err, data) => {
+    Product.find({category: req.params.id}, (err, data) => {
       if (err) {
         return res.status(500).send(err);
       }
@@ -138,9 +136,7 @@ module.exports = (api) => {
   }
 
   function findAllBySeller(req, res, next) {
-    Product.find({
-      seller: req.params.id,
-    }, (err, data) => {
+    Product.find({seller: req.params.id}, (err, data) => {
       if (err) {
         return res.status(500).send(err);
       }
